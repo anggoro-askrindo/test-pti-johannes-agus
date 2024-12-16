@@ -50,7 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/login").permitAll() // Berikan akses bebas untuk endpoint login
                 .antMatchers("/api/users/**", "/api/roles/**").hasRole("ADMIN") // Hanya ADMIN yang bisa akses
-                .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
