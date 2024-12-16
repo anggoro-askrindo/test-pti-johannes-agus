@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-//                .antMatchers("/api/auth/login").permitAll() // Berikan akses bebas untuk endpoint login
+                .antMatchers("/api/auth/login").permitAll() // Berikan akses bebas untuk endpoint login
                 .antMatchers("/api/users/**", "/api/roles/**").hasRole("ADMIN") // Hanya ADMIN yang bisa akses
                 .anyRequest().authenticated()
                 .and()
