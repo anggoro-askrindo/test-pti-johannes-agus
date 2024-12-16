@@ -53,7 +53,7 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
 
         MasterLookup masterLookupInformasiKepemilikan = masterLookupService.cekMasterLookup(asuransiMikroRumahkuDto.getInformasiKepemilikan(), "asmik_info_kepemilikan")
                 .orElseThrow(() -> new RuntimeException("Tidak ada Informasi Kepemilikan dengan key: " + asuransiMikroRumahkuDto.getInformasiKepemilikan() + "di grup Asmik Info Kepemilikan"));
-        asuransiMikroRumahku.setInformasiKepemilikan(masterLookupInformasiKepemilikan.getLabel());
+        asuransiMikroRumahku.setInformasiKepemilikan(masterLookupInformasiKepemilikan.getLookupKey());
 
         asuransiMikroRumahku.setAlamat(asuransiMikroRumahkuDto.getAlamat());
         asuransiMikroRumahku.setNamaAhliWaris(asuransiMikroRumahkuDto.getNamaAhliWaris());
@@ -62,7 +62,7 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
 
         MasterLookup masterLookupHubungan = masterLookupService.cekMasterLookup(asuransiMikroRumahku.getHubungan(), "ahli_waris")
                 .orElseThrow(() -> new RuntimeException("Tidak ada Hubungan dengan key: " + asuransiMikroRumahkuDto.getHubungan() + "di grup Ahli Waris"));
-        asuransiMikroRumahku.setHubungan(masterLookupHubungan.getLabel());
+        asuransiMikroRumahku.setHubungan(masterLookupHubungan.getLookupKey());
 
         asuransiMikroRumahku.setJenisPaket(asuransiMikroRumahkuDto.getJenisPaket());
         return asuransiMikroRumahkuRepository.save(asuransiMikroRumahku);
@@ -71,7 +71,7 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
     @Override
     public AsuransiMikroRumahku update(AsuransiMikroRumahkuDto asuransiMikroRumahkuDto) {
         AsuransiMikroRumahku asuransiMikroRumahku = asuransiMikroRumahkuRepository.findById(asuransiMikroRumahkuDto.getId())
-                .orElseThrow(() -> new RuntimeException("No Asuransi Mikro Rumahku Id Found With Id : " + asuransiMikroRumahkuDto.getId()));
+                .orElseThrow(() -> new RuntimeException("No Asuransi Mikro Rumahku Found With Id : " + asuransiMikroRumahkuDto.getId()));
 
         LocalDate today = LocalDate.now();
         LocalDate minDate = today.minusDays(3);
@@ -97,7 +97,7 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
 
         MasterLookup masterLookupInformasiKepemilikan = masterLookupService.cekMasterLookup(asuransiMikroRumahkuDto.getInformasiKepemilikan(), "asmik_info_kepemilikan")
                 .orElseThrow(() -> new RuntimeException("Tidak ada Informasi Kepemilikan dengan key: " + asuransiMikroRumahkuDto.getInformasiKepemilikan() + "di grup Asmik Info Kepemilikan"));
-        asuransiMikroRumahku.setInformasiKepemilikan(masterLookupInformasiKepemilikan.getLabel());
+        asuransiMikroRumahku.setInformasiKepemilikan(masterLookupInformasiKepemilikan.getLookupKey());
 
         asuransiMikroRumahku.setAlamat(asuransiMikroRumahkuDto.getAlamat());
         asuransiMikroRumahku.setNamaAhliWaris(asuransiMikroRumahkuDto.getNamaAhliWaris());
@@ -106,7 +106,7 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
 
         MasterLookup masterLookupHubungan = masterLookupService.cekMasterLookup(asuransiMikroRumahku.getHubungan(), "ahli_waris")
                 .orElseThrow(() -> new RuntimeException("Tidak ada Hubungan dengan key: " + asuransiMikroRumahkuDto.getHubungan() + "di grup Ahli Waris"));
-        asuransiMikroRumahku.setHubungan(masterLookupHubungan.getLabel());
+        asuransiMikroRumahku.setHubungan(masterLookupHubungan.getLookupKey());
 
         asuransiMikroRumahku.setJenisPaket(asuransiMikroRumahkuDto.getJenisPaket());
         return asuransiMikroRumahkuRepository.save(asuransiMikroRumahku);

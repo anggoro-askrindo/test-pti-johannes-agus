@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface MasterLookupService {
 
-    Optional<MasterLookup> cekMasterLookup (String key, String group);
+    Optional<MasterLookup> cekMasterLookup (String label, String group);
 
 }
