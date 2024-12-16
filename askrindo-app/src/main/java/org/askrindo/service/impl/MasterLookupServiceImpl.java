@@ -16,6 +16,10 @@ public class MasterLookupServiceImpl implements MasterLookupService {
 
     @Override
     public Optional<MasterLookup> cekMasterLookup(String label, String group) {
-        return masterLookupRepository.findByLookupKeyAndLookupGroup(label, group);
+        return masterLookupRepository.findByLabelAndLookupGroup(label, group);
+    }
+
+    public Optional<MasterLookup> cekLookupKey(String lookupKey) {
+        return masterLookupRepository.findByLookupKey(lookupKey);
     }
 }

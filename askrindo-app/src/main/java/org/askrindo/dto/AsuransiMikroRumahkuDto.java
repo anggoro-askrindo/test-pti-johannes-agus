@@ -3,10 +3,12 @@ package org.askrindo.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -53,4 +55,8 @@ public class AsuransiMikroRumahkuDto {
 
     @NotBlank
     private String jenisPaket;
+
+    private String nomorSertifikat;
+
+    private BigDecimal premi;
 }

@@ -6,12 +6,14 @@ import org.askrindo.dto.AsuransiMikroRumahkuDto;
 import org.askrindo.repository.AsuransiMikroRumahkuRepository;
 import org.askrindo.service.AsuransiMikroRumahkuService;
 import org.askrindo.service.MasterLookupService;
+import org.askrindo.service.TransaksiUtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,9 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
 
     @Autowired
     private MasterLookupService masterLookupService;
+
+    @Autowired
+    private TransaksiUtilityService utilityService;
 
     @Override
     public AsuransiMikroRumahku save(AsuransiMikroRumahkuDto asuransiMikroRumahkuDto) {
@@ -49,10 +54,10 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
         asuransiMikroRumahku.setEmail(asuransiMikroRumahkuDto.getEmail());
         asuransiMikroRumahku.setNomorTelepon(asuransiMikroRumahkuDto.getNomorTelepon());
         asuransiMikroRumahku.setJangkaWaktuAwal(asuransiMikroRumahkuDto.getJangkaWaktuAwal());
-        asuransiMikroRumahku.setJangkaWaktuAwal(asuransiMikroRumahkuDto.getJangkaWaktuAwal());
+        asuransiMikroRumahku.setJangkaWaktuAkhir(asuransiMikroRumahkuDto.getJangkaWaktuAkhir());
 
         MasterLookup masterLookupInformasiKepemilikan = masterLookupService.cekMasterLookup(asuransiMikroRumahkuDto.getInformasiKepemilikan(), "asmik_info_kepemilikan")
-                .orElseThrow(() -> new RuntimeException("Tidak ada Informasi Kepemilikan dengan key: " + asuransiMikroRumahkuDto.getInformasiKepemilikan() + "di grup Asmik Info Kepemilikan"));
+                .orElseThrow(() -> new RuntimeException("Tidak ada Informasi Kepemilikan dengan label: " + asuransiMikroRumahkuDto.getInformasiKepemilikan() + " di grup Asmik Info Kepemilikan"));
         asuransiMikroRumahku.setInformasiKepemilikan(masterLookupInformasiKepemilikan.getLookupKey());
 
         asuransiMikroRumahku.setAlamat(asuransiMikroRumahkuDto.getAlamat());
@@ -60,11 +65,23 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
         asuransiMikroRumahku.setTanggalLahir(asuransiMikroRumahkuDto.getTanggalLahir());
         asuransiMikroRumahku.setNomorTeleponAhliWaris(asuransiMikroRumahkuDto.getNomorTeleponAhliWaris());
 
-        MasterLookup masterLookupHubungan = masterLookupService.cekMasterLookup(asuransiMikroRumahku.getHubungan(), "ahli_waris")
-                .orElseThrow(() -> new RuntimeException("Tidak ada Hubungan dengan key: " + asuransiMikroRumahkuDto.getHubungan() + "di grup Ahli Waris"));
+        MasterLookup masterLookupHubungan = masterLookupService.cekMasterLookup(asuransiMikroRumahkuDto.getHubungan(), "ahli_waris")
+                .orElseThrow(() -> new RuntimeException("Tidak ada Hubungan dengan label: " + asuransiMikroRumahkuDto.getHubungan() + " di grup Ahli Waris"));
         asuransiMikroRumahku.setHubungan(masterLookupHubungan.getLookupKey());
 
         asuransiMikroRumahku.setJenisPaket(asuransiMikroRumahkuDto.getJenisPaket());
+
+        int nomorUrut = (int) (asuransiMikroRumahkuRepository.count() + 1);
+        String nomorSertifikat = utilityService.generateNomorSertifikat(nomorUrut, "9001", LocalDate.now());
+        asuransiMikroRumahku.setNomorSertifikat(nomorSertifikat);
+
+        int jumlahHariPertanggungan = utilityService.hitungJumlahHariPertanggungan(asuransiMikroRumahkuDto.getJangkaWaktuAwal(), asuransiMikroRumahkuDto.getJangkaWaktuAkhir());
+
+        // Hitung premi prorate
+        BigDecimal premiPaket = getPremiPaket(asuransiMikroRumahkuDto.getJenisPaket());
+        BigDecimal premi = utilityService.hitungPremiProrate(premiPaket, jumlahHariPertanggungan);
+        asuransiMikroRumahku.setPremi(premi);
+
         return asuransiMikroRumahkuRepository.save(asuransiMikroRumahku);
     }
 
@@ -93,10 +110,10 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
         asuransiMikroRumahku.setEmail(asuransiMikroRumahkuDto.getEmail());
         asuransiMikroRumahku.setNomorTelepon(asuransiMikroRumahkuDto.getNomorTelepon());
         asuransiMikroRumahku.setJangkaWaktuAwal(asuransiMikroRumahkuDto.getJangkaWaktuAwal());
-        asuransiMikroRumahku.setJangkaWaktuAwal(asuransiMikroRumahkuDto.getJangkaWaktuAwal());
+        asuransiMikroRumahku.setJangkaWaktuAkhir(asuransiMikroRumahkuDto.getJangkaWaktuAkhir());
 
         MasterLookup masterLookupInformasiKepemilikan = masterLookupService.cekMasterLookup(asuransiMikroRumahkuDto.getInformasiKepemilikan(), "asmik_info_kepemilikan")
-                .orElseThrow(() -> new RuntimeException("Tidak ada Informasi Kepemilikan dengan key: " + asuransiMikroRumahkuDto.getInformasiKepemilikan() + "di grup Asmik Info Kepemilikan"));
+                .orElseThrow(() -> new RuntimeException("Tidak ada Informasi Kepemilikan dengan label : " + asuransiMikroRumahkuDto.getInformasiKepemilikan() + " di grup Asmik Info Kepemilikan"));
         asuransiMikroRumahku.setInformasiKepemilikan(masterLookupInformasiKepemilikan.getLookupKey());
 
         asuransiMikroRumahku.setAlamat(asuransiMikroRumahkuDto.getAlamat());
@@ -104,11 +121,19 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
         asuransiMikroRumahku.setTanggalLahir(asuransiMikroRumahkuDto.getTanggalLahir());
         asuransiMikroRumahku.setNomorTeleponAhliWaris(asuransiMikroRumahkuDto.getNomorTeleponAhliWaris());
 
-        MasterLookup masterLookupHubungan = masterLookupService.cekMasterLookup(asuransiMikroRumahku.getHubungan(), "ahli_waris")
-                .orElseThrow(() -> new RuntimeException("Tidak ada Hubungan dengan key: " + asuransiMikroRumahkuDto.getHubungan() + "di grup Ahli Waris"));
+        MasterLookup masterLookupHubungan = masterLookupService.cekMasterLookup(asuransiMikroRumahkuDto.getHubungan(), "ahli_waris")
+                .orElseThrow(() -> new RuntimeException("Tidak ada Hubungan dengan label : " + asuransiMikroRumahkuDto.getHubungan() + " di grup Ahli Waris"));
         asuransiMikroRumahku.setHubungan(masterLookupHubungan.getLookupKey());
 
         asuransiMikroRumahku.setJenisPaket(asuransiMikroRumahkuDto.getJenisPaket());
+
+        int jumlahHariPertanggungan = utilityService.hitungJumlahHariPertanggungan(asuransiMikroRumahkuDto.getJangkaWaktuAwal(), asuransiMikroRumahkuDto.getJangkaWaktuAkhir());
+
+        // Hitung premi prorate
+        BigDecimal premiPaket = getPremiPaket(asuransiMikroRumahkuDto.getJenisPaket());
+        BigDecimal premi = utilityService.hitungPremiProrate(premiPaket, jumlahHariPertanggungan);
+        asuransiMikroRumahku.setPremi(premi);
+
         return asuransiMikroRumahkuRepository.save(asuransiMikroRumahku);
     }
 
@@ -133,5 +158,14 @@ public class AsuransiMikroRumahkuServiceImpl implements AsuransiMikroRumahkuServ
     public Page<AsuransiMikroRumahku> findAll(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return asuransiMikroRumahkuRepository.findAllByOrderByNamaTertanggungAsc(pageable);
+    }
+
+    private BigDecimal getPremiPaket(String jenisPaket) {
+        switch (jenisPaket.toLowerCase()) {
+            case "silver": return BigDecimal.valueOf(40000);
+            case "gold": return BigDecimal.valueOf(50000);
+            case "platinum": return BigDecimal.valueOf(60000);
+            default: throw new IllegalArgumentException("Jenis paket tidak valid.");
+        }
     }
 }

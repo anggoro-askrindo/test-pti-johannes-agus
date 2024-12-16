@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -58,5 +59,11 @@ public class AsuransiMikroRumahku {
 
     @Column(name = "jenis_paket", nullable = false, length = 150)
     private String jenisPaket;
+
+    @Column(name = "nomor_sertifikat", nullable = false, length = 50)
+    private String nomorSertifikat;
+
+    @Column(name = "premi", nullable = false)
+    private BigDecimal premi;
 }
 

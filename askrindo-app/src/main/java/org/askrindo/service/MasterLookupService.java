@@ -8,4 +8,6 @@ public interface MasterLookupService {
 
     Optional<MasterLookup> cekMasterLookup(String label, String group);
 
+    Optional<MasterLookup> cekLookupKey(String lookupKey);
+
 }

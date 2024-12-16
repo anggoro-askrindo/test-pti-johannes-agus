@@ -53,4 +53,10 @@ public class AsuransiMikroBahari {
     @Column(name = "jenis_paket", nullable = false, length = 150)
     private String jenisPaket;
 
+    @Column(name = "nomor_sertifikat", nullable = false, length = 50)
+    private String nomorSertifikat;
+
+    @Column(name = "premi", nullable = false)
+    private BigDecimal premi;
+
 }

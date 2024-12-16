@@ -1,8 +1,10 @@
 package org.askrindo.web.rest;
 
 import org.askrindo.domain.AsuransiMikroRumahku;
+import org.askrindo.domain.MasterLookup;
 import org.askrindo.dto.AsuransiMikroRumahkuDto;
 import org.askrindo.service.AsuransiMikroRumahkuService;
+import org.askrindo.service.MasterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class AsuransiMikroRumahkuController {
 
     @Autowired
     private AsuransiMikroRumahkuService asuransiMikroRumahkuService;
+
+    @Autowired
+    private MasterLookupService masterLookupService;
 
     @GetMapping("{id}")
     public AsuransiMikroRumahkuDto findByAsuransiMikroRumahku(@PathVariable(name = "id") String id) {
@@ -52,19 +57,24 @@ public class AsuransiMikroRumahkuController {
 
     private AsuransiMikroRumahkuDto toDto(AsuransiMikroRumahku asuransiMikroRumahku) {
         AsuransiMikroRumahkuDto asuransiMikroRumahkuDto = new AsuransiMikroRumahkuDto();
+        asuransiMikroRumahkuDto.setId(asuransiMikroRumahku.getId());
         asuransiMikroRumahkuDto.setNamaTertanggung(asuransiMikroRumahku.getNamaTertanggung());
         asuransiMikroRumahkuDto.setNomorKTP(asuransiMikroRumahku.getNomorKTP());
         asuransiMikroRumahkuDto.setEmail(asuransiMikroRumahku.getEmail());
         asuransiMikroRumahkuDto.setNomorTelepon(asuransiMikroRumahku.getNomorTelepon());
         asuransiMikroRumahkuDto.setJangkaWaktuAwal(asuransiMikroRumahku.getJangkaWaktuAwal());
         asuransiMikroRumahkuDto.setJangkaWaktuAkhir(asuransiMikroRumahku.getJangkaWaktuAkhir());
-        asuransiMikroRumahkuDto.setInformasiKepemilikan(asuransiMikroRumahku.getInformasiKepemilikan());
+        MasterLookup masterLookup1 = masterLookupService.cekLookupKey(asuransiMikroRumahku.getInformasiKepemilikan()).orElseThrow();
+        asuransiMikroRumahkuDto.setInformasiKepemilikan(masterLookup1.getLabel());
         asuransiMikroRumahkuDto.setAlamat(asuransiMikroRumahku.getAlamat());
         asuransiMikroRumahkuDto.setNamaAhliWaris(asuransiMikroRumahku.getNamaAhliWaris());
         asuransiMikroRumahkuDto.setTanggalLahir(asuransiMikroRumahku.getTanggalLahir());
         asuransiMikroRumahkuDto.setNomorTeleponAhliWaris(asuransiMikroRumahku.getNomorTeleponAhliWaris());
-        asuransiMikroRumahkuDto.setHubungan(asuransiMikroRumahku.getHubungan());
+        MasterLookup masterLookup2 = masterLookupService.cekLookupKey(asuransiMikroRumahku.getHubungan()).orElseThrow();
+        asuransiMikroRumahkuDto.setHubungan(masterLookup2.getLabel());
         asuransiMikroRumahkuDto.setJenisPaket(asuransiMikroRumahku.getJenisPaket());
+        asuransiMikroRumahkuDto.setNomorSertifikat(asuransiMikroRumahku.getNomorSertifikat());
+        asuransiMikroRumahkuDto.setPremi(asuransiMikroRumahku.getPremi());
         return asuransiMikroRumahkuDto;
     }
 

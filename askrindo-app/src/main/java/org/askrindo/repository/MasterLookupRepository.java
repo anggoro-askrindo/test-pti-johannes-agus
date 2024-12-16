@@ -9,6 +9,8 @@ import java.util.Optional;
 @Repository
 public interface MasterLookupRepository extends JpaRepository<MasterLookup, String> {
 
-    Optional<MasterLookup> findByLookupKeyAndLookupGroup(String lookupKey, String lookupGroup);
+    Optional<MasterLookup> findByLabelAndLookupGroup(String label, String lookupGroup);
+
+    Optional<MasterLookup> findByLookupKey(String lookupKey);
 
 }

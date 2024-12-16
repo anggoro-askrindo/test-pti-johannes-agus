@@ -35,7 +35,8 @@ public class AsuransiMikroBahariDto {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate jangkaWaktuAkhir;
 
-    @NotBlank
+    @NotBlank(message = "Nomor ID Kapal tidak boleh kosong")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Nomor ID Kapal hanya boleh berisi huruf dan angka")
     private String noIDKapal;
 
     @NotBlank
@@ -52,5 +53,9 @@ public class AsuransiMikroBahariDto {
 
     @NotBlank
     private String jenisPaket;
+
+    private String nomorSertifikat; // Tambahan kolom
+
+    private BigDecimal premi; // Tambahan kolom
 
 }

@@ -1,8 +1,10 @@
 package org.askrindo.web.rest;
 
 import org.askrindo.domain.AsuransiMikroBahari;
+import org.askrindo.domain.MasterLookup;
 import org.askrindo.dto.AsuransiMikroBahariDto;
 import org.askrindo.service.AsuransiMikroBahariService;
+import org.askrindo.service.MasterLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class AsuransiMikroBahariController {
 
     @Autowired
     private AsuransiMikroBahariService asuransiMikroBahariService;
+
+    @Autowired
+    private MasterLookupService masterLookupService;
 
     @GetMapping("{id}")
     public AsuransiMikroBahariDto findByAsuransiMikroBahari(@PathVariable(name = "id") String id) {
@@ -52,6 +57,7 @@ public class AsuransiMikroBahariController {
 
     private AsuransiMikroBahariDto toDto(AsuransiMikroBahari asuransiMikroBahari) {
         AsuransiMikroBahariDto asuransiMikroBahariDto = new AsuransiMikroBahariDto();
+        asuransiMikroBahariDto.setId(asuransiMikroBahari.getId());
         asuransiMikroBahariDto.setNamaTertanggung(asuransiMikroBahari.getNamaTertanggung());
         asuransiMikroBahariDto.setNomorKTP(asuransiMikroBahari.getNomorKTP());
         asuransiMikroBahariDto.setEmail(asuransiMikroBahari.getEmail());
@@ -59,11 +65,16 @@ public class AsuransiMikroBahariController {
         asuransiMikroBahariDto.setJangkaWaktuAwal(asuransiMikroBahari.getJangkaWaktuAwal());
         asuransiMikroBahariDto.setJangkaWaktuAkhir(asuransiMikroBahari.getJangkaWaktuAkhir());
         asuransiMikroBahariDto.setNoIDKapal(asuransiMikroBahari.getNoIDKapal());
-        asuransiMikroBahariDto.setJenisKapal(asuransiMikroBahari.getJenisKapal());
-        asuransiMikroBahariDto.setKonstruksiKapal(asuransiMikroBahari.getKonstruksiKapal());
-        asuransiMikroBahariDto.setPenggunaanKapal(asuransiMikroBahari.getPenggunaanKapal());
+        MasterLookup masterLookup1 = masterLookupService.cekLookupKey(asuransiMikroBahari.getJenisKapal()).orElseThrow();
+        asuransiMikroBahariDto.setJenisKapal(masterLookup1.getLabel());
+        MasterLookup masterLookup2 = masterLookupService.cekLookupKey(asuransiMikroBahari.getKonstruksiKapal()).orElseThrow();
+        asuransiMikroBahariDto.setKonstruksiKapal(masterLookup2.getLabel());
+        MasterLookup masterLookup3 = masterLookupService.cekLookupKey(asuransiMikroBahari.getPenggunaanKapal()).orElseThrow();
+        asuransiMikroBahariDto.setPenggunaanKapal(masterLookup3.getLabel());
         asuransiMikroBahariDto.setHargaKapal(asuransiMikroBahari.getHargaKapal());
         asuransiMikroBahariDto.setJenisPaket(asuransiMikroBahari.getJenisPaket());
+        asuransiMikroBahariDto.setNomorSertifikat(asuransiMikroBahari.getNomorSertifikat());
+        asuransiMikroBahariDto.setPremi(asuransiMikroBahari.getPremi());
         return asuransiMikroBahariDto;
     }
 
