@@ -23,3 +23,7 @@ logging:
     org.askrindo: DEBUG
     org.hibernate: ERROR
     org.springframework: INFO
+
+jwt:
+  secret: P@ssw0rd5524
+  expiration: 3600
