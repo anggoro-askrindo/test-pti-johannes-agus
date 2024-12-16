@@ -1,11 +1,8 @@
 package org.askrindo.web.rest;
 
 import org.askrindo.domain.AsuransiMikroBahari;
-import org.askrindo.domain.AsuransiMikroRumahku;
 import org.askrindo.dto.AsuransiMikroBahariDto;
-import org.askrindo.dto.AsuransiMikroRumahkuDto;
 import org.askrindo.service.AsuransiMikroBahariService;
-import org.askrindo.service.AsuransiMikroRumahkuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;

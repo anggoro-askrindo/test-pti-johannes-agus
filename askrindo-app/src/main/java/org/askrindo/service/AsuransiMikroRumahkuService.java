@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public interface AsuransiMikroRumahkuService {
 
-    AsuransiMikroRumahku save (AsuransiMikroRumahkuDto asuransiMikroRumahkuDto);
+    AsuransiMikroRumahku save(AsuransiMikroRumahkuDto asuransiMikroRumahkuDto);
 
-    AsuransiMikroRumahku update (AsuransiMikroRumahkuDto asuransiMikroRumahkuDto);
+    AsuransiMikroRumahku update(AsuransiMikroRumahkuDto asuransiMikroRumahkuDto);
 
-    void delete (String id);
+    void delete(String id);
 
     List<AsuransiMikroRumahku> listAsuransiMikroRumahku();
 
     Optional<AsuransiMikroRumahku> findByAsuransiMikroRumahku(String id);
 
-    Page<AsuransiMikroRumahku> findAll (int pageNumber, int pageSize);
+    Page<AsuransiMikroRumahku> findAll(int pageNumber, int pageSize);
 
 }

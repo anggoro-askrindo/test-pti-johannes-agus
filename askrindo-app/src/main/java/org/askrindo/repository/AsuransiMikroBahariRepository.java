@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AsuransiMikroBahariRepository extends JpaRepository<AsuransiMikroBahari, String> {
 
-    Page<AsuransiMikroBahari> findAllByOrderByNamaTertanggungAsc (Pageable pageable);
+    Page<AsuransiMikroBahari> findAllByOrderByNamaTertanggungAsc(Pageable pageable);
 
 }

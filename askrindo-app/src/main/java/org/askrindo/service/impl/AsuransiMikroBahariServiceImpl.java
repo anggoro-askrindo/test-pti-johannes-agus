@@ -1,7 +1,6 @@
 package org.askrindo.service.impl;
 
 import org.askrindo.domain.AsuransiMikroBahari;
-import org.askrindo.domain.AsuransiMikroRumahku;
 import org.askrindo.domain.MasterLookup;
 import org.askrindo.dto.AsuransiMikroBahariDto;
 import org.askrindo.repository.AsuransiMikroBahariRepository;
@@ -30,7 +29,7 @@ public class AsuransiMikroBahariServiceImpl implements AsuransiMikroBahariServic
     @Override
     public AsuransiMikroBahari save(AsuransiMikroBahariDto asuransiMikroBahariDto) {
 
-        if (!asuransiMikroBahariDto.getJangkaWaktuAwal().isEqual(LocalDate.now())){
+        if (!asuransiMikroBahariDto.getJangkaWaktuAwal().isEqual(LocalDate.now())) {
             throw new IllegalArgumentException("Jangka Waktu Awal hanya bisa diisi dengan hari ini.");
         }
 
@@ -78,7 +77,7 @@ public class AsuransiMikroBahariServiceImpl implements AsuransiMikroBahariServic
         AsuransiMikroBahari asuransiMikroBahari = asuransiMikroBahariRepository.findById(asuransiMikroBahariDto.getId())
                 .orElseThrow(() -> new RuntimeException("No Asuransi Mikro Bahari Found With Id : " + asuransiMikroBahariDto.getId()));
 
-        if (!asuransiMikroBahariDto.getJangkaWaktuAwal().isEqual(LocalDate.now())){
+        if (!asuransiMikroBahariDto.getJangkaWaktuAwal().isEqual(LocalDate.now())) {
             throw new IllegalArgumentException("Jangka Waktu Awal hanya bisa diisi dengan hari ini.");
         }
 
